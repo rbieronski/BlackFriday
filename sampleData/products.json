@@ -1,0 +1,62 @@
+[
+  {
+    "sku": "P1",
+    "name": "iPhone SE",
+    "base_price_net": 2200.00,
+    "minimal_price": 2150.00
+  },
+  {
+    "sku": "P2",
+    "name": "Telewizor Samsung 55 cali",
+    "base_price_net": 4999.00,
+    "minimal_price": 4029.30
+  },
+  {
+    "sku": "P3",
+    "name": "Słuchawki bluetooth Sony",
+    "base_price_net": 1600.50,
+    "minimal_price": 1499.10
+  },
+  {
+    "sku": "P4",
+    "name": "Dysk SSD USB C 2TB",
+    "base_price_net": 2100.00,
+    "minimal_price": 1782.00
+  },
+  {
+    "sku": "P5",
+    "name": "Laptop Acer 13 cali Intel i5",
+    "base_price_net": 2599.00,
+    "minimal_price": 2111.69
+  },
+  {
+    "sku": "P6",
+    "name": "Tablet iPad Pro",
+    "base_price_net": 4999.00,
+    "minimal_price": 3900.00
+  },
+  {
+    "sku": "P7",
+    "name": "Monitor Samsung 34 cale ISP",
+    "base_price_net": 2430.00,
+    "minimal_price": 2430.00
+  },
+  {
+    "sku": "P8",
+    "name": "Kamera GoPro 8",
+    "base_price_net": 920.00,
+    "minimal_price": 811.00
+  },
+  {
+    "sku": "P9",
+    "name": "Dron DJI Mavic Pro",
+    "base_price_net": 3500.30,
+    "minimal_price": 2900.10
+  },
+  {
+    "sku": "P10",
+    "name": "Aparat Nikon 789D",
+    "base_price_net": 3428.00,
+    "minimal_price": 2999.00
+  }
+]

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<promotions>
+  <promotion>
+    <sku>P1</sku>
+    <discount_value>5</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P2</sku>
+    <discount_value>15</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P3</sku>
+    <discount_value>50</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P5</sku>
+    <discount_value>3</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P6</sku>
+    <discount_value>20</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P8</sku>
+    <discount_value>5</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P9</sku>
+    <discount_value>10</discount_value>
+  </promotion>
+  <promotion>
+    <sku>P10</sku>
+    <discount_value>2</discount_value>
+  </promotion>
+</promotions>
