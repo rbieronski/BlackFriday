@@ -1,46 +1,34 @@
 <?php
 
-$xml = file_get_contents("sampleData/black_friday_2020.xml");
-$xml = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
-$json = json_encode($xml);
-$array = json_decode($json,TRUE);
+require_once('vendor/autoload.php');
+use Anguis\BlackFriday\Product\{
+                JsonProductReader,
+                ProductsCollection
+};
 
-$result = [];
-$arrLength = array_sum(array_map("count", $array));
-
-for( $x = 0; $x < $arrLength; $x++ ) {
-    $result[$array['promotion'][$x]['sku']] = $array['promotion'][$x]['discount_value'];
-}
-
-
-echo 'ok';
-echo '<pre>';
-
-//$my_array = (array)$xmlFile;
-
-
-print_r($result);
-echo '</pre>';
-echo '-------------';
-echo $array['promotion'][3]['sku'];
-
-
-
-//
-//$arr = [];
-//$array = json_decode(json_encode(simplexml_load_string($xml)),true);
-//if ( ! empty($array)) {
-//    $i=0;
-//    foreach ($array['promotion'] as $elem) {
-//        $arr[$i]['sku'] = $elem['promotion']['sku'];
-//        $arr[$i]['discount_value'] = $elem['promotion']['discount_value'];
-//        ++$i;
-//    }
+// check if parameters given
+//If(count($argv) < 3) {
+//    echo 'give path to products (.json file) and promos (xml file)' . PHP_EOL;
+//    echo 'sample: php app.php products.json black_friday_2020.xml' . PHP_EOL;
+//    die();
 //}
-//echo '<pre>';print_r($arr);echo '</pre>';
 
+// get files paths
+//$productsFile = $argv[1];
+//$promosFile =$argv[2];
+    // for debug only
+        $productsFile = "sampleData/products.json";
+        $promosFile = "sampleData/black_friday_2020.xml";
 
+// read files
+$productJson = New JsonProductReader($productsFile);
+$productCollection = New ProductsCollection($productJson);
+
+$coll = New \Anguis\BlackFriday\Collection\Collection();
+$coll = $productCollection->prepare();
+echo $coll->keyExists('P11');
+//echo 'ccccc';
 //echo '<pre>';
-//echo xml2array($xmlFile);
+//print_r($productCollection);
 //echo '</pre>';
-
+echo PHP_EOL;

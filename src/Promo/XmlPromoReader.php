@@ -6,8 +6,8 @@ namespace Anguis\BlackFriday\Promo;
  * Read promo prices from xml file
  * @author rbieronski <bluenow@gmail.com>
  */
-class XmlPromoReader implements PromoReaderInterface {
-
+class XmlPromoReader implements PromoReaderInterface
+{
     protected string $xmlPath;
 
     function __construct(string $xmlPath) {
