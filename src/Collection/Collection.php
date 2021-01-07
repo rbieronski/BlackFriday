@@ -27,4 +27,11 @@ class Collection
     {
         return isset($this->items[$key]);
     }
+
+    public function debugEcho
+    {
+        foreach ($this->items as $item) {
+            echo
+        }
+    }
 }

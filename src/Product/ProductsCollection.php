@@ -1,8 +1,6 @@
 <?php
 
 namespace Anguis\BlackFriday\Product;
-use Anguis\BlackFriday\Product\ProductReaderInterface;
-use Anguis\BlackFriday\Product\ProductEntity;
 use Anguis\BlackFriday\Collection\Collection;
 
 /**
@@ -20,7 +18,6 @@ class ProductsCollection
     }
 
     public function prepare(): Collection {
-
         $allRecords = $this->productReaderInterface->findAll();
         foreach ($allRecords as $item) {
             $obj = New ProductsEntity(

@@ -19,6 +19,6 @@ class JsonProductReader implements ProductReaderInterface
 	 *  @return array[]
 	 */
 	public function findAll(): array {
-		return json_decode(file_get_contents($this->jsonPath), true);
+        return json_decode(file_get_contents($this->jsonPath), true);
 	}
 }

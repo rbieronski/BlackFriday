@@ -3,7 +3,7 @@
 namespace Anguis\BlackFriday\Entity;
 
 use Anguis\BlackFriday\Product\ProductsRepository;
-use Anguis\BlackFriday\Promo\PromoRepository;
+use Anguis\BlackFriday\Promo\PromoEntity;
 
 /**
  * Class SkuRepository
@@ -12,11 +12,11 @@ use Anguis\BlackFriday\Promo\PromoRepository;
 class Product
 {
     protected ProductsRepository $productsRepository;
-    protected PromoRepository $promoRepository;
+    protected PromoEntity $promoRepository;
 
     function __construct(
         ProductsRepository $productsRepository,
-        PromoRepository $promoRepository
+        PromoEntity $promoRepository
     ) {
         $this->sku = $sku;
         $this->name = $name;
