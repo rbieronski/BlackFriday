@@ -11,9 +11,10 @@ class PromosCollection
     function __construct(PromoReaderInterface $promoReaderInterface) {
         $this->promoReaderInterface = $promoReaderInterface;
         $this->coll = New Collection();
+        $this->prepare();
     }
 
-    public function prepare(): Collection {
+    private function prepare() {
         $allRecords = $this->promoReaderInterface->findAll();
         foreach ($allRecords as $key=>$value) {
             $obj = New PromoEntity(
@@ -24,6 +25,9 @@ class PromosCollection
                 $obj, $key
             );
         }
+    }
+
+    public function getColl(): Collection {
         return $this->coll;
     }
 }

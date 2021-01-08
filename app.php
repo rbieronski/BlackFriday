@@ -9,6 +9,7 @@ use Anguis\BlackFriday\Promo\{
                 PromosCollection,
                 XmlPromoReader
 };
+use Anguis\BlackFriday\Command\PromoStrategyCommand;
 
 // check if parameters given
 //If(count($argv) < 3) {
@@ -29,21 +30,26 @@ use Anguis\BlackFriday\Promo\{
 
 // working ok!
       $productJson = New JsonProductReader($productsFile);
-      $productsCollection = New ProductsCollection($productJson);
+      $products = New ProductsCollection($productJson);
+      $productsCollection = $products->getColl();
 //    $coll = New \Anguis\BlackFriday\Collection\Collection();
 //    $coll = $productCollection->prepare();
     //echo $coll->keyExists('P11');
 
 
 $promosXml = New XmlPromoReader($promosFile);
-$promosCollection = New PromosCollection($promosXml);
+$promos = New PromosCollection($promosXml);
+$promosCollection = $promos->getColl();
+
+$command = New PromoStrategyCommand($productsCollection, $promosCollection);
+$result = $command->Run();
+
+print $result;
 
 
-print_r2($productsCollection->prepare()->getArray());
-print_r2($promosCollection->prepare()->getArray());
 
-print_r2($promosXml->findAll());
-
+print_r2($productsCollection->getKeys());
+print_r2($promosCollection->getKeys());
 
 //$promosCollection = New PromosCollection($promosXml);
 //$coll = New \Anguis\BlackFriday\Collection\Collection();

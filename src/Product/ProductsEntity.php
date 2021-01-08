@@ -24,4 +24,24 @@ class ProductsEntity
         $this->base_price_net = $base_price_net;
         $this->minimal_price_net = $minimal_price_net;
     }
+
+    public function getSku(): string
+    {
+        return $this->sku;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getBasePriceNet(): float
+    {
+        return $this->base_price_net;
+    }
+
+    public function getMinimalPriceNet(): float
+    {
+        return $this->minimal_price_net;
+    }
 }

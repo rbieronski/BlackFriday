@@ -15,9 +15,10 @@ class ProductsCollection
     function __construct(ProductReaderInterface $productReaderInterface) {
         $this->productReaderInterface = $productReaderInterface;
         $this->coll = New Collection();
+        $this->prepare();
     }
 
-    public function prepare(): Collection {
+    private function prepare() {
         $allRecords = $this->productReaderInterface->findAll();
         foreach ($allRecords as $item) {
             $obj = New ProductsEntity(
@@ -30,6 +31,9 @@ class ProductsCollection
                 $obj, $item['sku']
             );
         }
-    return $this->coll;
+    }
+
+    public function getColl(): Collection {
+        return $this->coll;
     }
 }

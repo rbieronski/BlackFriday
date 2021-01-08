@@ -10,16 +10,26 @@ class Collection
 {
     private $items = array();
 
-    public function addItem($obj, $key)
+    public function addItem($obj, $key = null)
     {
-        // add exception if not key given?
-        $this->items[$key] = $obj;
+        if ($key == null) {
+            echo 'NotKeyGiven';
+            // add exception NotKeyGiven;
+        } elseif (isset($this->items[$key])) {
+            echo 'KeyAlreadyInUse';
+            // add exception KeyAlreadyInUse;
+        } else {
+            $this->items[$key] = $obj;
+        }
     }
 
     public function deleteItem($key)
     {
-        if (isset($this->items[$key])) {
+        if ($this->keyExists($key)) {
             unset($this->items[$key]);
+        } else {
+            echo 'KeyNotExists';
+            // add exception KeyNotExists;
         }
     }
 
@@ -28,8 +38,27 @@ class Collection
         return isset($this->items[$key]);
     }
 
+    public function getItem($key): object
+    {
+        if ($this->keyExists($key)) {
+            return $this->items[$key];
+        } else {
+            echo 'KeyNotExists';
+            // add exception KeyNotExists;
+        }
+    }
 
-    public function getArray(): array
+    public function getKeys(): array
+    {
+        $keys = [];
+        $arr = $this->items;
+        foreach ($arr as $key=>$value) {
+            $keys[] = $key;
+        }
+        return $keys;
+    }
+
+    public function toArray(): array
     {
         return $this->items;
     }
