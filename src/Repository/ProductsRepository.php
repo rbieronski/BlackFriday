@@ -1,39 +1,39 @@
 <?php
 
-namespace Anguis\BlackFriday\Product;
+namespace Anguis\BlackFriday\Repository;
 use Anguis\BlackFriday\Collection\Collection;
+use Anguis\BlackFriday\Entity\ProductEntity;
+use Anguis\BlackFriday\Reader\Product\ProductReaderInterface;
+
 
 /**
  * Class ProductsRepository
  * @package Anguis\BlackFriday\Product
  */
-class ProductsCollection
+class ProductsRepository
 {
     protected ProductReaderInterface $productReaderInterface;
     protected Collection $coll;
 
-    function __construct(ProductReaderInterface $productReaderInterface) {
+    function __construct(ProductReaderInterface $productReaderInterface)
+    {
         $this->productReaderInterface = $productReaderInterface;
         $this->coll = New Collection();
-        $this->prepare();
-    }
-
-    private function prepare() {
         $allRecords = $this->productReaderInterface->findAll();
+
         foreach ($allRecords as $item) {
-            $obj = New ProductsEntity(
+            $obj = New ProductEntity(
                 $item['sku'],
                 $item['name'],
                 $item['base_price_net'],
                 $item['minimal_price']
             );
-            $this->coll->addItem(
-                $obj, $item['sku']
-            );
+            $this->coll->addItem($obj, $item['sku']);
         }
     }
 
-    public function getColl(): Collection {
+    public function getColl(): Collection
+    {
         return $this->coll;
     }
 }

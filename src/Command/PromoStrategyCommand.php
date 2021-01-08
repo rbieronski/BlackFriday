@@ -4,14 +4,16 @@ namespace Anguis\BlackFriday\Command;
 
 use Anguis\BlackFriday\Collection\Collection;
 
-class PromoStrategyCommand implements CommandInterface {
-
-    const STRING_SEPARATOR = " ";
+class PromoStrategyCommand implements CommandInterface
+{
+    const STRING_SEPARATOR = ", ";
     const TAX_PERCENTAGE = 23;
+
 
     protected Collection $products;
     protected Collection $promos;
     protected string $result = "";
+
 
     function __construct(
                 Collection $products,
@@ -25,7 +27,7 @@ class PromoStrategyCommand implements CommandInterface {
     {
         $productKeys = $this->products->getKeys();
 
-        foreach ($productKeys as $sku=>$value) {
+        foreach ($productKeys as $item=>$sku) {
 
             if ($this->promos->keyExists($sku)) {
 
@@ -55,15 +57,13 @@ class PromoStrategyCommand implements CommandInterface {
         return $this->result;
     }
 
-    private function PriceCalculate(float $netBase,
-                                    float $netMinimal,
-                                    float $discount): float {
+    private function PriceCalculate(
+        float $netBase,
+        float $netMinimal,
+        float $discount): float {
         // calculate price
         $tmpPrice = (1 - $discount) * $netBase;
-        $tmpPrice = max($tmpPrice, $netMinimal);
-
-        // add tax
-        return round($tmpPrice * (1 + self::TAX_PERCENTAGE), 2);
+        return max($tmpPrice, $netMinimal);
     }
 
     private function buildString(string $sku,
@@ -79,5 +79,14 @@ class PromoStrategyCommand implements CommandInterface {
         $this->result = $this->result . $str;
     }
 
+    private function RoundPrice(float $value): float
+    {
+        return round($value, 2);
+    }
+
+    private function AddTax(float $value): float
+    {
+        return $value * ( 1 + self::TAX_PERCENTAGE);
+    }
 
 }

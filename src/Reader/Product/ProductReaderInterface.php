@@ -1,6 +1,6 @@
 <?php
 
-namespace Anguis\BlackFriday\Product;
+namespace Anguis\BlackFriday\Reader\Product;
 
 /**
  *  Read data from source

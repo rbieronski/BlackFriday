@@ -1,17 +1,18 @@
 <?php
 
-namespace Anguis\BlackFriday\Product;
+namespace Anguis\BlackFriday\Entity;
 
 /**
  * Class ProductsEntity
  * @package Anguis\BlackFriday\Product
  */
-class ProductsEntity
+class ProductEntity
 {
     protected string $sku;
     protected string $name;
     protected float $base_price_net;
     protected float $minimal_price_net;
+
 
     function __construct(
         string $sku,

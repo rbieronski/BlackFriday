@@ -10,12 +10,13 @@ class Collection
 {
     private $items = array();
 
+
     public function addItem($obj, $key = null)
     {
         if ($key == null) {
             echo 'NotKeyGiven';
             // add exception NotKeyGiven;
-        } elseif (isset($this->items[$key])) {
+        } elseif ($this->keyExists($key)) {
             echo 'KeyAlreadyInUse';
             // add exception KeyAlreadyInUse;
         } else {

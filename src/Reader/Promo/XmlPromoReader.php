@@ -1,6 +1,6 @@
 <?php
 
-namespace Anguis\BlackFriday\Promo;
+namespace Anguis\BlackFriday\Reader\Promo;
 
 /**
  * Read promo prices from xml file
@@ -10,7 +10,8 @@ class XmlPromoReader implements PromoReaderInterface
 {
     protected string $xmlPath;
 
-    function __construct(string $xmlPath) {
+    function __construct(string $xmlPath)
+    {
         $this->xmlPath = $xmlPath;
     }
 

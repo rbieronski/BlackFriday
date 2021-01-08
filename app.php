@@ -1,14 +1,15 @@
 <?php
 
 require_once('vendor/autoload.php');
-use Anguis\BlackFriday\Product\{
-                JsonProductReader,
-                ProductsCollection
+use Anguis\BlackFriday\Repository\{
+    ProductsRepository,
+    PromosRepository
 };
-use Anguis\BlackFriday\Promo\{
-                PromosCollection,
-                XmlPromoReader
+use Anguis\BlackFriday\Reader\{
+    Product\JsonProductReader,
+    Promo\XmlPromoReader
 };
+
 use Anguis\BlackFriday\Command\PromoStrategyCommand;
 
 // check if parameters given
@@ -19,45 +20,32 @@ use Anguis\BlackFriday\Command\PromoStrategyCommand;
 //}
 
 // get files paths
-//$productsFile = $argv[1];
-//$promosFile =$argv[2];
-    // for debug only
-        $productsFile = "sampleData/products.json";
-        $promosFile = "sampleData/black_friday_2020.xml";
+$productsFile = $argv[1];
+$promosFile =$argv[2];
 
-// read files
+// for debug only
+//      $productsFile = "products.json";
+//      $promosFile = "black_friday_2020.xml";
 
-
-// working ok!
-      $productJson = New JsonProductReader($productsFile);
-      $products = New ProductsCollection($productJson);
-      $productsCollection = $products->getColl();
-//    $coll = New \Anguis\BlackFriday\Collection\Collection();
-//    $coll = $productCollection->prepare();
-    //echo $coll->keyExists('P11');
-
+// read files and prepare collections
+$productsJson = New JsonProductReader($productsFile);
+$productsRep = New ProductsRepository($productsJson);
+$productsCollection = $productsRep->getColl();
 
 $promosXml = New XmlPromoReader($promosFile);
-$promos = New PromosCollection($promosXml);
-$promosCollection = $promos->getColl();
+$promosRep = New PromosRepository($promosXml);
+$promosCollection = $promosRep->getColl();
 
-$command = New PromoStrategyCommand($productsCollection, $promosCollection);
+//
+$command = New PromoStrategyCommand(
+    $productsCollection,
+    $promosCollection
+);
+
 $command->Run();
 $result = $command->getResult();
 
 echo $result;
-
-
-
-//print_r2($productsCollection->getKeys());
-//print_r2($promosCollection->getKeys());
-
-//$promosCollection = New PromosCollection($promosXml);
-//$coll = New \Anguis\BlackFriday\Collection\Collection();
-//$coll = $promosCollection->prepare();
-//echo $coll->keyExists('P1');
-echo 'finished';
-
 
 
 function print_r2($obj) {
