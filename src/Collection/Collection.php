@@ -28,10 +28,9 @@ class Collection
         return isset($this->items[$key]);
     }
 
-    public function debugEcho
+
+    public function getArray(): array
     {
-        foreach ($this->items as $item) {
-            echo
-        }
+        return $this->items;
     }
 }

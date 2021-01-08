@@ -15,13 +15,13 @@ class PromosCollection
 
     public function prepare(): Collection {
         $allRecords = $this->promoReaderInterface->findAll();
-        foreach ($allRecords as $item) {
+        foreach ($allRecords as $key=>$value) {
             $obj = New PromoEntity(
-                $item['sku'],
-                $item['discount_value']
+                $key,
+                $value
             );
             $this->coll->addItem(
-                $obj, $item['sku']
+                $obj, $key
             );
         }
         return $this->coll;

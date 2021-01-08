@@ -28,9 +28,6 @@ class XmlPromoReader implements PromoReaderInterface
             $result[$array['promotion'][$x]['sku']] =
                 $array['promotion'][$x]['discount_value'];
         }
-        echo '<pre>';
-        print_r($result);
-        echo '</pre>';
         return $result;
     }
 }

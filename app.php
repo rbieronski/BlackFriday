@@ -28,27 +28,35 @@ use Anguis\BlackFriday\Promo\{
 
 
 // working ok!
-//    $productJson = New JsonProductReader($productsFile);
-//    $productCollection = New ProductsCollection($productJson);
+      $productJson = New JsonProductReader($productsFile);
+      $productsCollection = New ProductsCollection($productJson);
 //    $coll = New \Anguis\BlackFriday\Collection\Collection();
 //    $coll = $productCollection->prepare();
     //echo $coll->keyExists('P11');
 
+
 $promosXml = New XmlPromoReader($promosFile);
 $promosCollection = New PromosCollection($promosXml);
-$coll = New \Anguis\BlackFriday\Collection\Collection();
-$coll = $promosCollection->prepare();
+
+
+print_r2($productsCollection->prepare()->getArray());
+print_r2($promosCollection->prepare()->getArray());
+
+print_r2($promosXml->findAll());
+
+
+//$promosCollection = New PromosCollection($promosXml);
+//$coll = New \Anguis\BlackFriday\Collection\Collection();
+//$coll = $promosCollection->prepare();
 //echo $coll->keyExists('P1');
+echo 'finished';
 
 
 
+function print_r2($obj) {
+    echo '------------------------------------------';
+    echo PHP_EOL . '<pre>';
+    print_r($obj);
+    echo '</pre>' . PHP_EOL;
+}
 
-//echo 'ccccc';
-//echo '<pre>';
-//print_r($productJson);
-//echo '</pre>';
-//echo PHP_EOL . '------------------------------------------------------------------------------' . PHP_EOL;
-//echo '<pre>';
-//print_r($promosXml);
-//echo '</pre>';
-//echo PHP_EOL;
