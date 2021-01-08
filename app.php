@@ -42,14 +42,15 @@ $promos = New PromosCollection($promosXml);
 $promosCollection = $promos->getColl();
 
 $command = New PromoStrategyCommand($productsCollection, $promosCollection);
-$result = $command->Run();
+$command->Run();
+$result = $command->getResult();
 
-print $result;
+echo $result;
 
 
 
-print_r2($productsCollection->getKeys());
-print_r2($promosCollection->getKeys());
+//print_r2($productsCollection->getKeys());
+//print_r2($promosCollection->getKeys());
 
 //$promosCollection = New PromosCollection($promosXml);
 //$coll = New \Anguis\BlackFriday\Collection\Collection();

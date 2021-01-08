@@ -8,6 +8,6 @@ namespace Anguis\BlackFriday\Command;
  */
 Interface CommandInterface {
 
-    public function Run(): string;
+    public function Run();
 }
 

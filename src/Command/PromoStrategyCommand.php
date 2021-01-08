@@ -3,8 +3,6 @@
 namespace Anguis\BlackFriday\Command;
 
 use Anguis\BlackFriday\Collection\Collection;
-use Anguis\BlackFriday\Product\ProductsCollection;
-use Anguis\BlackFriday\Promo\PromosCollection;
 
 class PromoStrategyCommand implements CommandInterface {
 
@@ -13,7 +11,7 @@ class PromoStrategyCommand implements CommandInterface {
 
     protected Collection $products;
     protected Collection $promos;
-    protected string $result;
+    protected string $result = "";
 
     function __construct(
                 Collection $products,
@@ -23,10 +21,9 @@ class PromoStrategyCommand implements CommandInterface {
         $this->promos = $promos;
     }
 
-    public function Run(): string
+    public function Run()
     {
         $productKeys = $this->products->getKeys();
-        $promosKeys = $this->promos->getKeys();
 
         foreach ($productKeys as $sku=>$value) {
 
@@ -40,25 +37,28 @@ class PromoStrategyCommand implements CommandInterface {
                 $minimalPriceNet = $productObj->getMinimalPriceNet();
                 $discount = $promoObj->getDiscount();
                 $calculatedPriceTaxed = $this->PriceCalculate(
-                                                    $basePriceNet,
-                                                    $minimalPriceNet,
-                                                    $discount
+                    $basePriceNet,
+                    $minimalPriceNet,
+                    $discount
                 );
                 $this->buildString(
-                                $sku,
-                                $name,
-                                $basePriceNet,
-                                $calculatedPriceTaxed
+                    $sku,
+                    $name,
+                    $basePriceNet,
+                    $calculatedPriceTaxed
                 );
             }
         }
+    }
+
+    public function getResult(): string {
         return $this->result;
     }
 
     private function PriceCalculate(float $netBase,
                                     float $netMinimal,
                                     float $discount): float {
-        // calcluate price
+        // calculate price
         $tmpPrice = (1 - $discount) * $netBase;
         $tmpPrice = max($tmpPrice, $netMinimal);
 
@@ -78,4 +78,6 @@ class PromoStrategyCommand implements CommandInterface {
                 . PHP_EOL;
         $this->result = $this->result . $str;
     }
+
+
 }
