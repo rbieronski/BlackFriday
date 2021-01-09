@@ -2,16 +2,20 @@
 
 require_once('vendor/autoload.php');
 
-
 use Anguis\BlackFriday\Repository\{
     ProductsRepository,
-    PromosRepository
+    PromosRepository,
 };
 use Anguis\BlackFriday\Reader\{
     Product\JsonProductReader,
     Promo\XmlPromoReader
 };
-use Anguis\BlackFriday\Command\PromoStrategyCommand;
+
+use Anguis\BlackFriday\Command\BlackFridayPrices\{
+    PromoPricesCommand,
+    ShowPricesCommand
+};
+use Anguis\BlackFriday\Output\CliOutput;
 
 
 // check if parameters given
@@ -38,12 +42,15 @@ $promosXml = New XmlPromoReader($promosFile);
 $promosRep = New PromosRepository($promosXml);
 $promosCollection = $promosRep->getColl();
 
-// execute command
-$command = New PromoStrategyCommand(
+
+$pricesObj = New PromoPricesCommand(
     $productsCollection,
     $promosCollection
 );
 
-$command->Run();
-$result = $command->getResult();
-echo $result;
+$outputTo = new CliOutput();
+$pricesCommand = New ShowPricesCommand(
+    $pricesObj ->getResult(),
+    $outputTo
+);
+$pricesCommand->Run();

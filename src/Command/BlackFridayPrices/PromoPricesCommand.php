@@ -1,10 +1,12 @@
 <?php
 
-namespace Anguis\BlackFriday\Command;
+namespace Anguis\BlackFriday\Command\BlackFridayPrices;
+
 
 use Anguis\BlackFriday\Collection\Collection;
 
-class PromoStrategyCommand implements CommandInterface
+
+class PromoPricesCommand
 {
     const STRING_SEPARATOR = ", ";
     const TAX_PERCENTAGE = 23;
@@ -23,17 +25,29 @@ class PromoStrategyCommand implements CommandInterface
         $this->promos = $promos;
     }
 
-    public function Run()
+    public function getResult(): string
+    {
+        $this->prepare();
+        return $this->result;
+    }
+
+    /**
+     *  contains business logic
+     */
+    public function prepare()
     {
         $productKeys = $this->products->getKeys();
 
         foreach ($productKeys as $item=>$sku) {
 
+            // proceed only if match exists
             if ($this->promos->keyExists($sku)) {
 
+                // get array values
                 $productObj = $this->products->getItem($sku);
                 $promoObj = $this->promos->getItem($sku);
 
+                // set row variables
                 $name = $productObj->getName();
                 $basePriceNet = $productObj->getBasePriceNet();
                 $minimalPriceNet = $productObj->getMinimalPriceNet();
@@ -43,7 +57,9 @@ class PromoStrategyCommand implements CommandInterface
                     $minimalPriceNet,
                     $discount
                 );
-                $this->buildString(
+
+                // prepare result string
+                $this->addToResult(
                     $sku,
                     $name,
                     $basePriceNet,
@@ -53,40 +69,46 @@ class PromoStrategyCommand implements CommandInterface
         }
     }
 
-    public function getResult(): string {
-        return $this->result;
+    private function priceCalculate(
+            float $netBase,
+            float $netMinimal,
+            float $discount
+        ): float {
+
+        // no allow to drop price below minimum!
+        return max(
+            $this->forceDiscount($netBase, $discount),
+            $netMinimal
+        );
     }
 
-    private function PriceCalculate(
-        float $netBase,
-        float $netMinimal,
-        float $discount): float {
-        // calculate price
-        $tmpPrice = (1 - $discount) * $netBase;
-        return max($tmpPrice, $netMinimal);
-    }
-
-    private function buildString(string $sku,
+    private function addToResult(string $sku,
                                  string $name,
                                  string $priceBefore,
                                  string $priceNow) {
 
         $str = $sku . self::STRING_SEPARATOR
                 . $name . self::STRING_SEPARATOR
-                . round($priceBefore * ( 1 + self::TAX_PERCENTAGE), 2) . self::STRING_SEPARATOR
+                . $this->RoundPrice($this->AddTax($priceBefore)) . self::STRING_SEPARATOR
                 . $priceNow . self::STRING_SEPARATOR
                 . PHP_EOL;
+
+        // add result to existing string
         $this->result = $this->result . $str;
     }
 
-    private function RoundPrice(float $value): float
+    private function roundPrice(float $value): float
     {
         return round($value, 2);
     }
 
-    private function AddTax(float $value): float
+    private function addTax(float $value): float
     {
         return $value * ( 1 + self::TAX_PERCENTAGE);
     }
 
+    private function forceDiscount(float $value, float $discount): float
+    {
+        return $value * (1 - $discount);
+    }
 }
