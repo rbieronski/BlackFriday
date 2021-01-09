@@ -10,12 +10,15 @@ use Anguis\BlackFriday\Reader\{
     Product\JsonProductReader,
     Promo\XmlPromoReader
 };
-
 use Anguis\BlackFriday\Command\BlackFridayPrices\{
     PricesCalculation,
     ShowPricesCommand
 };
-use Anguis\BlackFriday\Output\CliOutput;
+use Anguis\BlackFriday\Output\{
+    CliOutput,
+    CliClimateOutput
+};
+
 
 
 // check if parameters given
@@ -51,7 +54,9 @@ $pricesObj = New PricesCalculation(
     $promosCollection
 );
 
-$outputTo = new CliOutput();
+$outputTo = new CliClimateOutput();
+//$outputTo = new CliOutput();
+
 $pricesCommand = New ShowPricesCommand(
     $pricesObj ->getResult(),
     $outputTo

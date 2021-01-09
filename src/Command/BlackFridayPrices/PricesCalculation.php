@@ -89,8 +89,12 @@ class PricesCalculation
 
         $str = $sku . self::STRING_SEPARATOR
                 . $name . self::STRING_SEPARATOR
-                . $this->RoundPrice($this->AddTax($priceBefore)) . self::STRING_SEPARATOR
-                . $priceNow . self::STRING_SEPARATOR
+                . $this->forceDecimals(
+                    $this->RoundPrice($this->AddTax($priceBefore))
+                    ) . self::STRING_SEPARATOR
+                . $this->forceDecimals(
+                    $priceNow
+                    ) . self::STRING_SEPARATOR
                 . PHP_EOL;
 
         // add result to existing string
@@ -110,5 +114,10 @@ class PricesCalculation
     private function forceDiscount(float $value, float $discount): float
     {
         return $value * (1 - $discount);
+    }
+
+    private function forceDecimals(float $value): string
+    {
+        return number_format($value, 2, '.', ' ');
     }
 }
