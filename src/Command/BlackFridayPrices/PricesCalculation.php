@@ -118,6 +118,11 @@ class PricesCalculation
 
     private function forceDecimals(float $value): string
     {
-        return number_format($value, 2, '.', ' ');
+        return str_pad(
+            number_format($value, 2, '.', ' '),
+            15,
+            " ",
+            STR_PAD_LEFT
+        );
     }
 }
