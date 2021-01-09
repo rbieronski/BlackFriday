@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59dc3cb48111ac3ac5dea587f484db91",
+    "content-hash": "a576b2211bbc80eeee153eb31e969e4c",
     "packages": [
         {
             "name": "league/climate",
@@ -65,6 +65,10 @@
                 "php",
                 "terminal"
             ],
+            "support": {
+                "issues": "https://github.com/thephpleague/climate/issues",
+                "source": "https://github.com/thephpleague/climate/tree/3.6.0"
+            },
             "time": "2020-10-04T16:02:59+00:00"
         },
         {
@@ -264,7 +268,11 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "ext-libxml": "*"
+    },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

@@ -12,16 +12,19 @@ use Anguis\BlackFriday\Reader\{
 };
 
 use Anguis\BlackFriday\Command\BlackFridayPrices\{
-    PromoPricesCommand,
+    PricesCalculation,
     ShowPricesCommand
 };
 use Anguis\BlackFriday\Output\CliOutput;
 
 
 // check if parameters given
-If(count($argv) < 3) {
-    echo 'give path to products (.json file) and promos (xml file)' . PHP_EOL;
-    echo 'sample: php app.php products.json black_friday_2020.xml' . PHP_EOL;
+If(count($argv) <> 3) {
+    echo 'Please give paramateres to execute program:'. PHP_EOL;
+    echo '  (1) path to products - .json file'. PHP_EOL;
+    echo '  (2) path to promos - .xml file)' . PHP_EOL;
+    echo 'sample use:' . PHP_EOL;
+    echo '$ php app.php products.json black_friday_2020.xml' . PHP_EOL;
     die();
 }
 
@@ -43,7 +46,7 @@ $promosRep = New PromosRepository($promosXml);
 $promosCollection = $promosRep->getColl();
 
 
-$pricesObj = New PromoPricesCommand(
+$pricesObj = New PricesCalculation(
     $productsCollection,
     $promosCollection
 );
