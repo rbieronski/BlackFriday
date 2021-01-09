@@ -6,7 +6,7 @@ namespace Anguis\BlackFriday\Command\BlackFridayPrices;
 use Anguis\BlackFriday\Collection\Collection;
 
 
-class PromoPricesCommand
+class PricesCalculation
 {
     const STRING_SEPARATOR = ", ";
     const TAX_PERCENTAGE = 23;
