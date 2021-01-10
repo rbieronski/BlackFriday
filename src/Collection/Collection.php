@@ -4,9 +4,13 @@ namespace Anguis\BlackFriday\Collection;
 
 /**
  * Class Collection
+ * Wrapper for array object
+ * allowing to easy manipulation such as add/remove
+ * using 'keys' specified for each item in collection
+ *
  * @package Anguis\BlackFriday\Collection
  */
-class Collection
+final class Collection
 {
     private $items = array();
 
@@ -39,14 +43,17 @@ class Collection
         return isset($this->items[$key]);
     }
 
-    public function getItem($key): object
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function getItem($key)
     {
-        if ($this->keyExists($key)) {
-            return $this->items[$key];
-        } else {
-            echo 'KeyNotExists';
-            // add exception KeyNotExists;
+        if (!$this->keyExists($key)) {
+            throw new KeyNotExitsException(
+                "There is no item in collection with specified key " . $key);
         }
+        return $this->items[$key];
     }
 
     public function getKeys(): array
