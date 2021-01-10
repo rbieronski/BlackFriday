@@ -8,15 +8,14 @@ use League\CLImate\CLImate;
 class CliClimateOutput implements OutputInterface
 {
     protected CLImate $climate;
-    protected string $inlineSeparator;
-    protected string $rowSeparator;
+    protected string $inlineSeparator = ", ";
+    protected string $rowSeparator = ", " . PHP_EOL;
 
     function __construct()
     {
         $this->climate = new CLImate();
-        $this->inlineSeparator = ", ";
-        $this->rowSeparator = ", " . PHP_EOL;
     }
+
 
     public function output($string)
     {

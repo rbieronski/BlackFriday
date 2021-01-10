@@ -2,24 +2,36 @@
 
 namespace Anguis\BlackFriday\Command\BlackFridayPrices;
 
-
 use Anguis\BlackFriday\Collection\Collection;
 
-
+/**
+ * Class calculating prices for Black Friday
+ * contains business logic
+ *
+ * @package Anguis\BlackFriday\Command\BlackFridayPrices
+ */
 class PricesCalculation
 {
     const STRING_SEPARATOR = ", ";
     const TAX_PERCENTAGE = 23;
+    const NEW_LINE_SEPARATOR = PHP.EOL;
 
-
+    // entry data sources
     protected Collection $products;
     protected Collection $promos;
+
+    // variable to store result
     protected string $result = "";
 
 
+    /**
+     * Receive data from two collections
+     * @param Collection $products
+     * @param Collection $promos
+     */
     function __construct(
-                Collection $products,
-                Collection  $promos
+        Collection $products,
+        Collection  $promos
     ) {
         $this->products = $products;
         $this->promos = $promos;
@@ -32,9 +44,11 @@ class PricesCalculation
     }
 
     /**
-     *  contains business logic
+     * main method calculating prices
+     * and calling method 'addToResult'
+     * for each row calculated
      */
-    public function prepare()
+    private function prepare()
     {
         $productKeys = $this->products->getKeys();
 
@@ -74,11 +88,10 @@ class PricesCalculation
     }
 
     private function discountPriceCalculate(
-            float $basePrice,
-            float $minimalPrice,
-            float $discount
-        ): float {
-
+        float $basePrice,
+        float $minimalPrice,
+        float $discount
+    ): float {
         // no allow to drop price below minimum to avoid making a loss!
         $finalPromoPrice = max(
             $this->forceDiscount($basePrice, $discount),
@@ -93,15 +106,24 @@ class PricesCalculation
         string $priceBefore,
         string $priceNow
     ) {
-
         $str = $sku . self::STRING_SEPARATOR
-                . $name . self::STRING_SEPARATOR
-                . $this->forcePadding($priceBefore) . self::STRING_SEPARATOR
-                . $this->forcePadding($priceNow). self::STRING_SEPARATOR
-                . PHP_EOL;
+            . $name . self::STRING_SEPARATOR
+            . $this->forcePadding($priceBefore) . self::STRING_SEPARATOR
+            . $this->forcePadding($priceNow). self::STRING_SEPARATOR
+            . self::NEW_LINE_SEPARATOR;
 
         // add result to existing string
         $this->result = $this->result . $str;
+    }
+
+    public static function getStringSeparator(): string
+    {
+        return self::STRING_SEPARATOR;
+    }
+
+    public static function getNewlineSeparator(): string
+    {
+        return self::NEW_LINE_SEPARATOR;
     }
 
     private function addTax(float $value): float
