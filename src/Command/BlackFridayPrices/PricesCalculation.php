@@ -47,14 +47,18 @@ class PricesCalculation
                 $productObj = $this->products->getItem($sku);
                 $promoObj = $this->promos->getItem($sku);
 
-                // set row variables
+                // get values from objects
                 $name = $productObj->getName();
                 $basePriceNet = $productObj->getBasePriceNet();
                 $minimalPriceNet = $productObj->getMinimalPriceNet();
                 $discount = $promoObj->getDiscount();
-                $calculatedPriceTaxed = $this->PriceCalculate(
-                    $basePriceNet,
-                    $minimalPriceNet,
+
+                // recalculate prices
+                $basePriceGross = $this->addTax($basePriceNet);
+                $minimalPriceGross = $this->addTax($minimalPriceNet);
+                $discountPriceGross = $this->discountPriceCalculate(
+                    $basePriceGross,
+                    $minimalPriceGross,
                     $discount
                 );
 
@@ -62,61 +66,55 @@ class PricesCalculation
                 $this->addToResult(
                     $sku,
                     $name,
-                    $basePriceNet,
-                    $calculatedPriceTaxed
+                    $basePriceGross,
+                    $discountPriceGross
                 );
             }
         }
     }
 
-    private function priceCalculate(
-            float $netBase,
-            float $netMinimal,
+    private function discountPriceCalculate(
+            float $basePrice,
+            float $minimalPrice,
             float $discount
         ): float {
 
-        // no allow to drop price below minimum!
-        return max(
-            $this->forceDiscount($netBase, $discount),
-            $netMinimal
+        // no allow to drop price below minimum to avoid making a loss!
+        $finalPromoPrice = max(
+            $this->forceDiscount($basePrice, $discount),
+            $minimalPrice
         );
+        return round($finalPromoPrice, 2);
     }
 
-    private function addToResult(string $sku,
-                                 string $name,
-                                 string $priceBefore,
-                                 string $priceNow) {
+    private function addToResult(
+        string $sku,
+        string $name,
+        string $priceBefore,
+        string $priceNow
+    ) {
 
         $str = $sku . self::STRING_SEPARATOR
                 . $name . self::STRING_SEPARATOR
-                . $this->forceDecimals(
-                    $this->RoundPrice($this->AddTax($priceBefore))
-                    ) . self::STRING_SEPARATOR
-                . $this->forceDecimals(
-                    $priceNow
-                    ) . self::STRING_SEPARATOR
+                . $this->forcePadding($priceBefore) . self::STRING_SEPARATOR
+                . $this->forcePadding($priceNow). self::STRING_SEPARATOR
                 . PHP_EOL;
 
         // add result to existing string
         $this->result = $this->result . $str;
     }
 
-    private function roundPrice(float $value): float
-    {
-        return round($value, 2);
-    }
-
     private function addTax(float $value): float
     {
-        return $value * ( 1 + self::TAX_PERCENTAGE);
+        return $value * ( 1 + 0.01 * self::TAX_PERCENTAGE);
     }
 
     private function forceDiscount(float $value, float $discount): float
     {
-        return $value * (1 - $discount);
+        return $value * (1 - 0.01 * $discount);
     }
 
-    private function forceDecimals(float $value): string
+    private function forcePadding(float $value): string
     {
         return str_pad(
             number_format($value, 2, '.', ' '),

@@ -10,7 +10,7 @@ class CliOutput implements OutputInterface
 {
     public function output($string)
     {
-        echo 'showing output in terminal:' . PHP_EOL
+        echo 'showing result output...:' . PHP_EOL
              . "---------------------------------------"
              . PHP_EOL
              . $string

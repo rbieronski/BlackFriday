@@ -1,6 +1,9 @@
 <?php
 
-require_once('vendor/autoload.php');
+require_once __DIR__ . '/vendor/autoload.php';
+
+define('DEFAULT_PROMOS_FILE', 'black_friday_2020.xml');
+define('DEFAULT_PRODUCTS_FILE', 'products.json');
 
 use Anguis\BlackFriday\Repository\{
     ProductsRepository,
@@ -20,43 +23,51 @@ use Anguis\BlackFriday\Output\{
 };
 
 
-
-// check if parameters given
-If(count($argv) <> 3) {
-    echo 'Please give paramateres to execute program:'. PHP_EOL;
+// check if file paths given
+if(count($argv) <> 3) {
+    // show short help message
+    echo 'Please give 2 parameters to execute program:'. PHP_EOL;
     echo '  (1) path to products - .json file'. PHP_EOL;
-    echo '  (2) path to promos - .xml file' . PHP_EOL . PHP_EOL;
-    echo 'sample use:' . PHP_EOL;
-    echo '$ php app.php products.json black_friday_2020.xml' . PHP_EOL;
-    die();
+    echo '  (2) path to promos - .xml file' . PHP_EOL ;
+    echo 'sample use with default paths:' . PHP_EOL;
+    echo '$ php app.php ' . DEFAULT_PRODUCTS_FILE . ' ' . DEFAULT_PROMOS_FILE. PHP_EOL . PHP_EOL;
+
+    // suggest default paths
+    $useDefaultParameters = readline('Run script with default parameters [Y]es/[n]o: ');
+    if (strtolower($useDefaultParameters) <> "y") {
+        die();
+    } else {
+        $productsFile = DEFAULT_PRODUCTS_FILE;
+        $promosFile = DEFAULT_PROMOS_FILE;
+    }
+} else {
+    // get files paths
+    $productsFile = $argv[1];
+    $promosFile =$argv[2];
 }
 
-// get files paths
-$productsFile = $argv[1];
-$promosFile =$argv[2];
-    // for debug only
-    //      $productsFile = "products.json";
-    //      $promosFile = "black_friday_2020.xml";
-
-
-// read files and prepare collections
-$productsJson = New JsonProductReader($productsFile);
-$productsRep = New ProductsRepository($productsJson);
-$productsCollection = $productsRep->getColl();
-
-$promosXml = New XmlPromoReader($promosFile);
-$promosRep = New PromosRepository($promosXml);
-$promosCollection = $promosRep->getColl();
-
-
-$pricesObj = New PricesCalculation(
-    $productsCollection,
-    $promosCollection
+// prepare repositories
+$productsRep = New ProductsRepository(
+    New JsonProductReader($productsFile)
+);
+$promosRep = New PromosRepository(
+    new XmlPromoReader($promosFile)
 );
 
-$outputTo = new CliClimateOutput();
-//$outputTo = new CliOutput();
+// prepare new prices
+$pricesObj = New PricesCalculation(
+    $productsRep->getColl(),
+    $promosRep->getColl()
+);
 
+// choose CLI output object depending on installed package
+if (\Composer\InstalledVersions::isInstalled('league/climate')) {
+    $outputTo = new CliClimateOutput();
+} else {
+    $outputTo = new CliOutput();
+}
+
+// send to output
 $pricesCommand = New ShowPricesCommand(
     $pricesObj ->getResult(),
     $outputTo
