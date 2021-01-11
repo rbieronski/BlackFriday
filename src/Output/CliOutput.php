@@ -10,10 +10,8 @@ class CliOutput implements OutputInterface
 {
     public function output($string)
     {
-        echo 'showing result output...:' . PHP_EOL
-             . "---------------------------------------"
-             . PHP_EOL
-             . $string
-             . PHP_EOL;
+        echo 'Showing result output...:' . PHP_EOL
+             . str_repeat("-", 50)
+             . PHP_EOL . $string . PHP_EOL;
     }
 }

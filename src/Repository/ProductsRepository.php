@@ -15,6 +15,11 @@ class ProductsRepository
     protected ProductReaderInterface $productReaderInterface;
     protected Collection $coll;
 
+    /**
+     * ProductsRepository constructor
+     * creates Collection of ProductEntity's
+     * @param ProductReaderInterface $productReaderInterface
+     */
     function __construct(ProductReaderInterface $productReaderInterface)
     {
         $this->productReaderInterface = $productReaderInterface;

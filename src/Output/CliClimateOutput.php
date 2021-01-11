@@ -41,8 +41,10 @@ class CliClimateOutput implements OutputInterface
             );
         }
 
-        // remove last unnecessary empty row
-        unset($array[count($array)-1]);
+        // protect from printing last empty row
+        if (strlen(implode($array[count($array)-1])) < 1) {
+            unset($array[count($array)-1]);
+        }
 
         // print to console
         $this->climate->lightCyan()->table($array);

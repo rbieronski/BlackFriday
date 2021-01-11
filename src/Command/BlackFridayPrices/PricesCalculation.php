@@ -12,9 +12,9 @@ use Anguis\BlackFriday\Collection\Collection;
  */
 class PricesCalculation
 {
-    const STRING_SEPARATOR = ", ";
-    const TAX_PERCENTAGE = 23;
-    const NEW_LINE_SEPARATOR = PHP_EOL;
+    public const STRING_SEPARATOR = ", ";
+    public const NEW_LINE_SEPARATOR = PHP_EOL;
+    protected const TAX_PERCENTAGE = 23;
 
     // entry data sources
     protected Collection $products;
@@ -22,7 +22,6 @@ class PricesCalculation
 
     // variable to store result
     protected string $result = "";
-
 
     /**
      * Receive data from two collections
@@ -128,21 +127,12 @@ class PricesCalculation
 
     private function forcePadding(float $value): string
     {
+        // ToDo: add padding depending on 'cells' length
         return str_pad(
             number_format($value, 2, '.', ' '),
             15,
             " ",
             STR_PAD_LEFT
         );
-    }
-
-    public static function getStringSeparator(): string
-    {
-        return self::STRING_SEPARATOR;
-    }
-
-    public static function getNewlineSeparator(): string
-    {
-        return self::NEW_LINE_SEPARATOR;
     }
 }

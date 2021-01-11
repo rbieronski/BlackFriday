@@ -12,8 +12,8 @@ use Anguis\BlackFriday\Output\OutputInterface;
  */
 class ShowPricesCommand implements CommandInterface
 {
-    protected $outputMsg;
-    protected $outputType;
+    protected string $outputMsg;
+    protected OutputInterface $outputType;
 
     function __construct(string $outputMsg, OutputInterface $outputType) {
         $this->outputMsg = $outputMsg;

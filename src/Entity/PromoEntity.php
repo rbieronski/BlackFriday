@@ -2,6 +2,10 @@
 
 namespace Anguis\BlackFriday\Entity;
 
+/**
+ * Class PromoEntity
+ * @package Anguis\BlackFriday\Entity
+ */
 class PromoEntity
 {
     protected string $sku;

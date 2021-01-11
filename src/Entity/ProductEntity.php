@@ -3,7 +3,7 @@
 namespace Anguis\BlackFriday\Entity;
 
 /**
- * Class ProductsEntity
+ * Class ProductEntity
  * @package Anguis\BlackFriday\Product
  */
 class ProductEntity

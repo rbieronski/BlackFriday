@@ -3,13 +3,13 @@
 namespace Anguis\BlackFriday\Reader\Product;
 
 /**
- *  Read data directly from .json file
- *  @author rbieronski <bluenow@gmail.com>
+ * Read data directly from .json file
+ * to array
+ * @author rbieronski <bluenow@gmail.com>
  */
 class JsonProductReader implements ProductReaderInterface
 {
 	protected string $jsonPath;
-
 
 	function __construct(string $jsonPath)
     {
