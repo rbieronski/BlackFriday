@@ -33,7 +33,7 @@ if(count($argv) <> 3) {
     echo '$ php app.php ' . DEFAULT_PRODUCTS_FILE . ' ' . DEFAULT_PROMOS_FILE. PHP_EOL . PHP_EOL;
 
     // suggest default paths
-    $useDefaultParameters = readline('Run script with default parameters [Y]es/[n]o: ');
+    $useDefaultParameters = readline('Run script with default parameters [y]es/[n]o: ');
     if (strtolower($useDefaultParameters) <> "y") {
         die();
     } else {
@@ -62,14 +62,19 @@ $pricesObj = New PricesCalculation(
 
 // choose CLI output object depending on installed package
 if (\Composer\InstalledVersions::isInstalled('league/climate')) {
-    $outputTo = new CliClimateOutput();
+    $output = new CliClimateOutput();
+    $output->setCustomSplitSeparators(
+        PricesCalculation::STRING_SEPARATOR,
+        PricesCalculation::STRING_SEPARATOR .
+            PricesCalculation::NEW_LINE_SEPARATOR
+    );
 } else {
-    $outputTo = new CliOutput();
+    $output = new CliOutput();
 }
 
 // send to output
 $pricesCommand = New ShowPricesCommand(
-    $pricesObj ->getResult(),
-    $outputTo
+    $pricesObj->getResult(),
+    $output
 );
 $pricesCommand->Run();

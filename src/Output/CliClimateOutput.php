@@ -8,14 +8,23 @@ use League\CLImate\CLImate;
 class CliClimateOutput implements OutputInterface
 {
     protected CLImate $climate;
-    protected string $inlineSeparator = ", ";
-    protected string $rowSeparator = ", " . PHP_EOL;
+
+    // default separators to explode string
+    protected string $inlineSeparator = " ";
+    protected string $rowSeparator = PHP_EOL;
 
     function __construct()
     {
         $this->climate = new CLImate();
     }
 
+    public function setCustomSplitSeparators(
+        string $inlineSeparator,
+        string $rowSeparator
+    ) {
+        $this->inlineSeparator = $inlineSeparator;
+        $this->rowSeparator = $rowSeparator;
+    }
 
     public function output($string)
     {
@@ -39,12 +48,3 @@ class CliClimateOutput implements OutputInterface
         $this->climate->lightCyan()->table($array);
     }
 }
-
-//public function output($string)
-//{
-//    echo 'showing output in terminal:' . PHP_EOL
-//        . "---------------------------------------"
-//        . PHP_EOL
-//        . $string
-//        . PHP_EOL;
-//}

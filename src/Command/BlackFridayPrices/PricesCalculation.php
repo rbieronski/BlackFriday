@@ -14,7 +14,7 @@ class PricesCalculation
 {
     const STRING_SEPARATOR = ", ";
     const TAX_PERCENTAGE = 23;
-    const NEW_LINE_SEPARATOR = PHP.EOL;
+    const NEW_LINE_SEPARATOR = PHP_EOL;
 
     // entry data sources
     protected Collection $products;
@@ -116,16 +116,6 @@ class PricesCalculation
         $this->result = $this->result . $str;
     }
 
-    public static function getStringSeparator(): string
-    {
-        return self::STRING_SEPARATOR;
-    }
-
-    public static function getNewlineSeparator(): string
-    {
-        return self::NEW_LINE_SEPARATOR;
-    }
-
     private function addTax(float $value): float
     {
         return $value * ( 1 + 0.01 * self::TAX_PERCENTAGE);
@@ -144,5 +134,15 @@ class PricesCalculation
             " ",
             STR_PAD_LEFT
         );
+    }
+
+    public static function getStringSeparator(): string
+    {
+        return self::STRING_SEPARATOR;
+    }
+
+    public static function getNewlineSeparator(): string
+    {
+        return self::NEW_LINE_SEPARATOR;
     }
 }
