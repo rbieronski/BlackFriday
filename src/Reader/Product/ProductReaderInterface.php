@@ -1,14 +1,13 @@
 <?php
 
-namespace Anguis\BlackFriday\Product;
+namespace Anguis\BlackFriday\Reader\Product;
 
 /**
  *  Read data from source
- *  and prepare for use by ?????
  *  @author rbieronski <bluenow@gmail.com>
  */
-interface ProductReaderInterface {
-
+interface ProductReaderInterface
+{
 	/*
 	 * return all products
 	 * @return array[]

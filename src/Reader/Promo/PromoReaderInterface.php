@@ -1,11 +1,13 @@
 <?php
 
-namespace Anguis\BlackFriday\Promo;
+namespace Anguis\BlackFriday\Reader\Promo;
+
 /*
  *  Read data from source
  *  @author rbieronski <bluenow@gmail.com>
  */
-interface PromoReaderInterface {
+interface PromoReaderInterface
+{
 
     /*
      *  return all products

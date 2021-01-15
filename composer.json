@@ -1,0 +1,25 @@
+{
+    "name": "anguis/black-friday",
+    "description": "Project to learn PHP | calculating promo prices",
+    "type": "project",
+    "require": {
+        "league/climate": "^3.6",
+        "monolog/monolog": "^2.2",
+        "ext-json": "*",
+        "ext-SimpleXML": "*",
+        "ext-libxml": "*",
+        "ext-readline": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anguis\\BlackFriday\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rafał Bieroński",
+            "email": "bieronski@yahoo.pl"
+        }
+    ]
+}
