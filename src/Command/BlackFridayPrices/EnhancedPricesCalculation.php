@@ -138,13 +138,13 @@ class EnhancedPricesCalculation
     {
         $str = $sku . self::STRING_SEPARATOR
             . $name . self::STRING_SEPARATOR
-            . $this->forcePadding($priceBeforeGross) . self::STRING_SEPARATOR
-            . $this->forcePadding($priceNowGross) . self::STRING_SEPARATOR
+            . $this->forceDecimals($priceBeforeGross) . self::STRING_SEPARATOR
+            . $this->forceDecimals($priceNowGross) . self::STRING_SEPARATOR
 
             //  !* difference to PricesCalculation class *!
-            . $this->forcePadding($priceBeforeNet) . self::STRING_SEPARATOR
-            . $this->forcePadding($priceNowNet) . self::STRING_SEPARATOR
-            . $this->forcePadding($minimalPrice) . self::STRING_SEPARATOR
+            . $this->forceDecimals($priceBeforeNet) . self::STRING_SEPARATOR
+            . $this->forceDecimals($priceNowNet) . self::STRING_SEPARATOR
+            . $this->forceDecimals($minimalPrice) . self::STRING_SEPARATOR
             //  ---------------------- end of differences
 
             . self::NEW_LINE_SEPARATOR;
@@ -163,14 +163,8 @@ class EnhancedPricesCalculation
         return $value * (1 - 0.01 * $discount);
     }
 
-    protected function forcePadding(float $value): string
+    protected function forceDecimals(float $value): string
     {
-        // ToDo: add padding depending on 'cells' length
-        return str_pad(
-            number_format($value, 2, '.', ' '),
-            15,
-            " ",
-            STR_PAD_LEFT
-        );
+        return number_format($value, 2, '.', '');
     }
 }
