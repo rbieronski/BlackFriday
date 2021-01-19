@@ -14,7 +14,7 @@ use Anguis\BlackFriday\Reader\{
     Promo\XmlPromoReader
 };
 use Anguis\BlackFriday\Command\BlackFridayPrices\{
-    PricesCalculation,
+    EnhancedPricesCalculation,
     ShowPricesCommand
 };
 use Anguis\BlackFriday\Output\{
@@ -47,15 +47,15 @@ if(count($argv) <> 3) {
 }
 
 // prepare repositories
-$productsRep = New ProductsRepository(
-    New JsonProductReader($productsFile)
+$productsRep = new ProductsRepository(
+    new JsonProductReader($productsFile)
 );
-$promosRep = New PromosRepository(
+$promosRep = new PromosRepository(
     new XmlPromoReader($promosFile)
 );
 
 // prepare new prices
-$pricesObj = New PricesCalculation(
+$pricesObj = new EnhancedPricesCalculation(
     $productsRep->getColl(),
     $promosRep->getColl()
 );
@@ -64,9 +64,9 @@ $pricesObj = New PricesCalculation(
 if (\Composer\InstalledVersions::isInstalled('league/climate')) {
     $output = new CliClimateOutput();
     $output->setCustomSplitSeparators(
-        PricesCalculation::STRING_SEPARATOR,
-        PricesCalculation::STRING_SEPARATOR .
-            PricesCalculation::NEW_LINE_SEPARATOR
+        EnhancedPricesCalculation::STRING_SEPARATOR,
+        EnhancedPricesCalculation::STRING_SEPARATOR .
+            EnhancedPricesCalculation::NEW_LINE_SEPARATOR
     );
 } else {
     $output = new CliOutput();
