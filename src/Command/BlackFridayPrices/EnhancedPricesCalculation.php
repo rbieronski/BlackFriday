@@ -3,7 +3,8 @@
 namespace Anguis\BlackFriday\Command\BlackFridayPrices;
 
 use Anguis\BlackFriday\Collection\Collection;
-use Anguis\BlackFriday\Entity\BlackFridayPricesEntity;
+use Anguis\BlackFriday\Repository\ProductsRepository;
+use Anguis\BlackFriday\Repository\PromosRepository;
 
 /**
  * Class calculating prices for Black Friday
@@ -47,17 +48,17 @@ class EnhancedPricesCalculation
 
     /**
      * Receive data from two collections
-     * @param Collection $products
-     * @param Collection $promos
+     * @param ProductsRepository $products
+     * @param PromosRepository $promos
      */
     function __construct(
-        Collection $products,
-        Collection $promos,
-        bool $sortResult = true
+        ProductsRepository $products,
+        PromosRepository $promos,
+        bool $sortResult
     )
     {
-        $this->products = $products;
-        $this->promos = $promos;
+        $this->products = $products->getColl();
+        $this->promos = $promos->getColl();
         $this->sortResult = $sortResult;
     }
 
@@ -187,31 +188,10 @@ class EnhancedPricesCalculation
         return $this->result;
     }
 
-    public function sortAscByPriceNowGross(): array
+    protected function sortAscByPriceNowGross(): array
     {
         $price = array_column($this->arrResult, 'priceNowGross');
         array_multisort($price, SORT_ASC, $this->arrResult);
         return $this->arrResult;
     }
-
-//
-//    private function addToResult(
-//        string $sku,
-//        string $name,
-//        string $priceBefore,
-//        string $priceNow
-//    ) {
-//        $str = $sku . self::STRING_SEPARATOR
-//            . $name . self::STRING_SEPARATOR
-//            . $this->forcePadding($priceBefore) . self::STRING_SEPARATOR
-//            . $this->forcePadding($priceNow). self::STRING_SEPARATOR
-//            . self::NEW_LINE_SEPARATOR;
-//
-//        // add result to existing string
-//        $this->result = $this->result . $str;
-//    }
-
-
-
-
 }
