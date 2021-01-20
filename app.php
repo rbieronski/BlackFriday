@@ -63,7 +63,7 @@ $promosRep = new PromosRepository(
     new XmlPromoReader($promosFile)
 );
 
-// run
+// run command
 $commandFactory = new CommandFactory(
     $productsRep,
     $promosRep,
