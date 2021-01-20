@@ -1,3 +1,4 @@
 .idea/
 vendor/
 test.php
+src/Entity/BlackFridayPricesEntity.php

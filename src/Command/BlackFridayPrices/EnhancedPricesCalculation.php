@@ -3,6 +3,7 @@
 namespace Anguis\BlackFriday\Command\BlackFridayPrices;
 
 use Anguis\BlackFriday\Collection\Collection;
+use Anguis\BlackFriday\Entity\BlackFridayPricesEntity;
 
 /**
  * Class calculating prices for Black Friday
@@ -20,10 +21,7 @@ use Anguis\BlackFriday\Collection\Collection;
  * Inheritance using PricesCalculation class was not available
  * because its methods visibility were set to private instead protected/public.
  *
- * In the current class all the private methods were set to protected.
- * The rest of differences compared to PricesCalculation class
- * were marked with additional comment:
- *          //  !* difference to PricesCalculation class *!
+ * Added sort bool parameter to constructor
  */
 class EnhancedPricesCalculation
 {
@@ -31,12 +29,21 @@ class EnhancedPricesCalculation
     public const NEW_LINE_SEPARATOR = PHP_EOL;
     protected const TAX_PERCENTAGE = 23;
 
-    // entry data sources
+    // Entry data sources
     protected Collection $products;
     protected Collection $promos;
 
-    // variable to store result
+    // Should result be sorted
+    protected bool $sortResult;
+
+    // Variables to store result:
+    //      array $arrResult - temporary, only to use by current class
+    //                         in a case of implement method such as sort
+    //      string $result - 'external' final result variable
+    //                       to use by ShowPricesCommand class
+    protected array $arrResult;
     protected string $result = "";
+
 
     /**
      * Receive data from two collections
@@ -45,17 +52,22 @@ class EnhancedPricesCalculation
      */
     function __construct(
         Collection $products,
-        Collection $promos
+        Collection $promos,
+        bool $sortResult = true
     )
     {
         $this->products = $products;
         $this->promos = $promos;
+        $this->sortResult = $sortResult;
     }
 
     public function getResult(): string
     {
-        $this->prepare();
-        return $this->result;
+        $this->prepareResultArray();
+        if ($this->sortResult) {
+            $this->sortAscByPriceNowGross();
+        }
+        return $this->prepareResultString();
     }
 
     /**
@@ -63,7 +75,7 @@ class EnhancedPricesCalculation
      * and calling method 'addToResult'
      * for each row calculated
      */
-    protected function prepare()
+    protected function prepareResultArray()
     {
         $productKeys = $this->products->getKeys();
 
@@ -91,22 +103,21 @@ class EnhancedPricesCalculation
                     $discount
                 );
 
-                //  !* difference to PricesCalculation class *!
                 $discountPriceNet = $this->discountPriceCalculate(
                     $basePriceNet,
                     $minimalPriceNet,
                     $discount
                 );
 
-                // prepare result string
-                $this->addToResult(
+                // prepare result array
+                $this->addToResultArray(
                     $sku,
                     $name,
                     $basePriceGross,
                     $discountPriceGross,
-                    $basePriceNet,          //  !* difference to PricesCalculation class *!
-                    $discountPriceNet,      //  !* difference to PricesCalculation class *!
-                    $minimalPriceNet        //  !* difference to PricesCalculation class *!
+                    $basePriceNet,
+                    $discountPriceNet,
+                    $minimalPriceNet
                 );
             }
         }
@@ -126,33 +137,6 @@ class EnhancedPricesCalculation
         return round($finalPromoPrice, 2);
     }
 
-    protected function addToResult(
-        string $sku,
-        string $name,
-        string $priceBeforeGross,
-        string $priceNowGross,
-        string $priceBeforeNet,             //  !* difference to PricesCalculation class *!
-        string $priceNowNet,                //  !* difference to PricesCalculation class *!
-        string $minimalPrice                //  !* difference to PricesCalculation class *!
-    )
-    {
-        $str = $sku . self::STRING_SEPARATOR
-            . $name . self::STRING_SEPARATOR
-            . $this->forceDecimals($priceBeforeGross) . self::STRING_SEPARATOR
-            . $this->forceDecimals($priceNowGross) . self::STRING_SEPARATOR
-
-            //  !* difference to PricesCalculation class *!
-            . $this->forceDecimals($priceBeforeNet) . self::STRING_SEPARATOR
-            . $this->forceDecimals($priceNowNet) . self::STRING_SEPARATOR
-            . $this->forceDecimals($minimalPrice) . self::STRING_SEPARATOR
-            //  ---------------------- end of differences
-
-            . self::NEW_LINE_SEPARATOR;
-
-        // add result to existing string
-        $this->result = $this->result . $str;
-    }
-
     protected function addTax(float $value): float
     {
         return $value * (1 + 0.01 * self::TAX_PERCENTAGE);
@@ -167,4 +151,67 @@ class EnhancedPricesCalculation
     {
         return number_format($value, 2, '.', '');
     }
+
+    protected function addToResultArray(
+        string $sku,
+        string $name,
+        string $priceBeforeGross,
+        string $priceNowGross,
+        string $priceBeforeNet,
+        string $priceNowNet,
+        string $minimalPrice
+    ) {
+        $arr['sku'] = $sku;
+        $arr['name'] = $name;
+        $arr['priceBeforeGross'] = $priceBeforeGross;
+        $arr['priceNowGross'] = $priceNowGross;
+        $arr['priceBeforeNet'] = $priceBeforeNet;
+        $arr['priceNowNet'] = $priceNowNet;
+        $arr['minimalPrice'] =$minimalPrice;
+        $this->arrResult[] = $arr;
+    }
+
+    protected function prepareResultString(): string
+    {
+        foreach ($this->arrResult as $item) {
+            $this->result = $this->result
+                . $item['sku'] . self::STRING_SEPARATOR
+                . $item['name'] . self::STRING_SEPARATOR
+                . $this->forceDecimals($item['priceBeforeGross']) . self::STRING_SEPARATOR
+                . $this->forceDecimals($item['priceNowGross']) . self::STRING_SEPARATOR
+                . $this->forceDecimals($item['priceBeforeNet']) . self::STRING_SEPARATOR
+                . $this->forceDecimals($item['priceNowNet']) . self::STRING_SEPARATOR
+                . $this->forceDecimals($item['minimalPrice']) . self::STRING_SEPARATOR
+                . self::NEW_LINE_SEPARATOR;
+        }
+        return $this->result;
+    }
+
+    public function sortAscByPriceNowGross(): array
+    {
+        $price = array_column($this->arrResult, 'priceNowGross');
+        array_multisort($price, SORT_ASC, $this->arrResult);
+        return $this->arrResult;
+    }
+
+//
+//    private function addToResult(
+//        string $sku,
+//        string $name,
+//        string $priceBefore,
+//        string $priceNow
+//    ) {
+//        $str = $sku . self::STRING_SEPARATOR
+//            . $name . self::STRING_SEPARATOR
+//            . $this->forcePadding($priceBefore) . self::STRING_SEPARATOR
+//            . $this->forcePadding($priceNow). self::STRING_SEPARATOR
+//            . self::NEW_LINE_SEPARATOR;
+//
+//        // add result to existing string
+//        $this->result = $this->result . $str;
+//    }
+
+
+
+
 }
