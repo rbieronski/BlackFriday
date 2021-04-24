@@ -24,7 +24,7 @@ use Anguis\BlackFriday\Repository\PromosRepository;
  *
  * Added sort bool parameter to constructor
  */
-class EnhancedPricesCalculation
+class EnhancedPricesCalculation implements PricesCalculationInterface
 {
     public const STRING_SEPARATOR = ", ";
     public const NEW_LINE_SEPARATOR = PHP_EOL;
