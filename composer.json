@@ -1,7 +1,6 @@
 {
     "name": "anguis/black-friday",
     "description": "Project to learn PHP | calculating promo prices",
-    "type": "project",
     "require": {
         "league/climate": "^3.6",
         "monolog/monolog": "^2.2",
